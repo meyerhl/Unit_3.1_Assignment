@@ -2,6 +2,7 @@
 Create Abstract Class
 
 Please view the BibleData3 file for raw data.
+
 Please view the AbstractBibleBook file for programming code.
 
 Given the previously created collection of all Bible Books in the New Testament, create
