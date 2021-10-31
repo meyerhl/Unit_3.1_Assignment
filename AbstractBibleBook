@@ -1,0 +1,196 @@
+/**
+ * Given the previously created collection of all Bible Books in the New
+ * Testament, create an abstract class that serves as the base class for a
+ * series of subclasses for the different categories of Books in the New
+ * Testament. You should update your text file to further distinguish into
+ * the correct categories and write programming logic to create instances
+ * of the correct kinds of classes. 
+ * 
+ * The class heirarchy should be:
+ * Abstract Class BibleBook
+ * Gospel - Abstract Class Letter
+ *          Local Church Letter - Pastoral Epistles - General Epistles
+ *          
+ * There should be an abstract method at the BibleBook level called 
+ * 'display' that should be implemented at a lower level to dictate
+ * the type of book along with its name and number of chapters.
+ */
+import java.util.Scanner;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+
+abstract class BibleBook {
+    String bookClass; //class of book, either gospel or letter
+    String bookCategory; // category of book, for letter, Local Church or Pastoral or General Epistles
+    String bookName; //title of book
+    int bookChapters; //chapters in book
+    String shortSummary; //summary of book
+    
+    public String getBookClass() {
+        return bookClass;
+    }
+    public String getBookCategory() {
+        return bookCategory;
+    }
+    public String getBookName() {
+        return bookName;
+    }
+    public int getBookChapters() {
+        return bookChapters;
+    }
+    public String getShortSummary() {
+        return shortSummary;
+    }
+    public abstract String display(); // define the abstract methods in a lower level
+}
+class Gospel extends BibleBook {
+    public Gospel (String cl, String cat, String bn, int c, String ss) { //constructor w/same name as class for instantianting objects
+        this.bookClass = cl;
+        this.bookCategory = cat;
+        this.bookName = bn;
+        this.bookChapters = c;
+        this.shortSummary = ss;
+        
+    }
+    public String display() {
+        String display = bookClass + ": " + bookName + " (" + bookChapters + " chapters)";
+        return display;
+    }
+}
+abstract class Letters extends BibleBook {
+    //public abstract String display(); //define the abstract method in a lower level
+}
+class LocalChurch extends Letters {
+    public LocalChurch (String cl, String cat, String bn, int c, String ss) { //constructor w/same name as class for instantianting objects
+        this.bookClass = cl;
+        this.bookCategory = cat;
+        this.bookName = bn;
+        this.bookChapters = c;
+        this.shortSummary = ss;
+        
+    }
+    public String display() {
+        String display = bookCategory + ": " + bookName + " (" + bookChapters + " chapters)";
+        return display;
+    }
+}
+class PastoralEpistles extends Letters {
+    public PastoralEpistles (String cl, String cat, String bn, int c, String ss) { //constructor w/same name as class for instantianting objects
+        this.bookClass = cl;
+        this.bookCategory = cat;
+        this.bookName = bn;
+        this.bookChapters = c;
+        this.shortSummary = ss;
+        
+    }
+    public String display() {
+        String display = bookCategory + ": " + bookName + " (" + bookChapters + " chapters)";
+        return display;
+    }
+}
+class GeneralEpistles extends Letters {
+    public GeneralEpistles (String cl, String cat, String bn, int c, String ss) { //constructor w/same name as class for instantianting objects
+        this.bookClass = cl;
+        this.bookCategory = cat;
+        this.bookName = bn;
+        this.bookChapters = c;
+        this.shortSummary = ss;
+        
+    }
+    public String display() {
+        String display = bookCategory + ": " + bookName + " (" + bookChapters + " chapters)";
+        return display;
+    }
+}
+public class AbstractBibleBook {
+    public static void readFile(String fileName) throws Exception {  //accepts a String fileName when called
+        try {
+            File bibleFile = new File("BibleData3.txt");
+            Scanner s = new Scanner (bibleFile);
+            
+            int gCounter = 0;
+            int lcCounter = 0;
+            int peCounter = 0;
+            int geCounter = 0;
+            
+            // creates a series of ArrayList objects and allocates memory to each as part of the various non-abstract <Classes>
+            ArrayList<Gospel> gBook = new ArrayList<Gospel>(); 
+            ArrayList<LocalChurch> lcLetter = new ArrayList<LocalChurch>();
+            ArrayList<PastoralEpistles> peLetter = new ArrayList<PastoralEpistles>();
+            ArrayList<GeneralEpistles> geLetter = new ArrayList<GeneralEpistles>();
+            
+        
+            while (s.hasNextLine()) {
+                String bookLine = s.nextLine();
+                String[] bibleComponents = bookLine.split(",");
+    
+                //put all of these bibleComponents into a BibleBook object.
+                String bookClass = bibleComponents[0];
+                String bookCategory = bibleComponents[1];
+                String bookName = bibleComponents[2];
+                int bookChapters = Integer.valueOf(bibleComponents[3]);
+                String shortSummary = bibleComponents[4]; 
+     
+                if (bibleComponents[0].equals("Gospel")) {
+                    gBook.add(new Gospel(bookClass, bookCategory, bookName, bookChapters, shortSummary));
+                    gCounter++;
+                }
+                else if (bibleComponents[0].equals("Letter")) {
+                    if (bibleComponents[1].equals("Local Church")) {
+                        lcLetter.add(new LocalChurch(bookClass, bookCategory, bookName, bookChapters, shortSummary));
+                        lcCounter++;
+                    }
+                    else if (bibleComponents[1].equals("Pastoral Epistles")) {
+                        peLetter.add(new PastoralEpistles(bookClass, bookCategory, bookName, bookChapters, shortSummary));
+                        peCounter++;
+                    }
+                    else if (bibleComponents[1].equals("General Epistles")) {
+                        geLetter.add(new GeneralEpistles(bookClass, bookCategory, bookName, bookChapters, shortSummary));
+                        geCounter++;
+                    }
+                }
+                else {
+                    System.out.println("Not formatted properly.");
+                }
+                
+            }
+            s.close();
+            System.out.println("-------------------------------------------------");
+            System.out.println("These are the series of Gospels: ");
+            System.out.println("-------------------------------------------------");
+            for (Gospel gospel : gBook) {
+                System.out.println(gospel.display());
+            }
+            System.out.println("-------------------------------------------------");
+            System.out.println("These are the series of Letters: ");
+            System.out.println("-------------------------------------------------");
+            for (LocalChurch localChurch : lcLetter) {
+                System.out.println(localChurch.display());
+            }
+            System.out.println("-----------------");    
+            for (PastoralEpistles pastoralEpistles : peLetter) {
+                System.out.println(pastoralEpistles.display());
+            }
+            System.out.println("-----------------");     
+            for (GeneralEpistles generalEpistles : geLetter) {
+                System.out.println(generalEpistles.display());
+            }
+        }
+        catch (FileNotFoundException e) {
+            System.out.println("An error occurred");
+            e.printStackTrace();
+        }
+        
+    }
+ 
+    public static void main(String[] args) throws Exception {
+        readFile("BibleData3.txt");
+ 
+    }
+
+}
