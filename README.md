@@ -12,11 +12,12 @@ instances of the correct kinds of classes.
 
 The class heirarchy should be:
 
-Abstract Class: Bible Book > Gospel
-                           > Abstract Class: Letter
-                                   > Local Church Letter
-                                   > Pastoral Epistles
-                                   > General Epistles
+Abstract Class: Bible Book 
+> Gospel
+> Abstract Class: Letter
+>>>>>> Local Church Letter
+>>>>>> Pastoral Epistles
+>>>>>> General Epistles
 
 There should be an abstract method at the BibleBook level called "display" that should
 be implmented at a lower level to dictate the type of book along with its name and 
